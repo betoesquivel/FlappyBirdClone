@@ -10,15 +10,19 @@ package flappybirdclone;
  *
  * @author ppesq
  */
-public class Constants {
+public interface Constants {
     //window
+    public final int WINDOW_HEIGHT = 767;
+    public final int WINDOW_WIDTH = 432;
     
     //flappy bird
+    public final int BIRD_WIDTH = 51;
+    public final int BIRD_HEIGHT = 36;
     
     //pipes
-    public final int PIPE_HEIGHT = 300; 
-    public final int PIPE_WIDTH = 45; 
-    public final int PIPE_GAP = 150; 
+    public final int PIPE_HEIGHT = 480; 
+    public final int PIPE_WIDTH = 78; 
+    public final int PIPE_GAP = 220; 
     
     //background
     
@@ -26,6 +30,4 @@ public class Constants {
     public final int G = 2; //gravity
     public final int GAME_SPEED = 1; //Change in x of the whole game (background and pipes)
     public final int LEVEL1GAP = PIPE_WIDTH * 5; 
-    public final int LEVEL2GAP = PIPE_WIDTH * 3; 
-    public final int LEVEL3GAP = PIPE_WIDTH * 2; 
 }
