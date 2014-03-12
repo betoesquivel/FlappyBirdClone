@@ -95,13 +95,8 @@ public class Base implements Constants {
            //return icono.getIconHeight();
        return (new ImageIcon(animacion.getImagen())).getIconHeight();
    }
-    
-    public Rectangle getPerimetro(){
-            return new Rectangle(getPosX(),getPosY(),getAncho(),getAlto());
+
+   public Rectangle getPerimetro(int ancho, int alto){
+            return new Rectangle(getPosX(), getPosY(), ancho, alto);
     }
-    
-    public boolean intersecta(Base obj){
-            return getPerimetro().intersects(obj.getPerimetro());
-    }
-    
 }// Fin de la clase Base
