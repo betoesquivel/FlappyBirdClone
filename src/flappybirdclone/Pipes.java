@@ -8,6 +8,7 @@ package flappybirdclone;
 import java.awt.Toolkit;
 import java.net.URL;
 import java.awt.Image;
+import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 
 /**
@@ -43,9 +44,16 @@ public class Pipes extends Base implements Constants {
         return (new ImageIcon(pipeDown.getImage())).getImage();
     }
     
+    public Rectangle getPerimetro(){
+            return new Rectangle(getPosX(),getPosY(),getAncho(),getAlto());
+    }
+    
+    public boolean intersecta(Base obj){
+            return getPerimetro().intersects(obj.getPerimetro());
+    }
+    
     public boolean checkPipeUpCollision(Base obj) {
         
-        //if(obj.getPosY() < )
         return false;
     }
     
