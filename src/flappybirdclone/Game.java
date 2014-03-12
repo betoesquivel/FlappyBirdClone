@@ -20,6 +20,7 @@ import java.awt.event.MouseListener;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import java.util.LinkedList;
 
 /**
  * El applet AppletAnimacion muestra una animación en pantalla.
@@ -28,7 +29,10 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
     private Image dbImage;    // Imagen a proyectar
     private Graphics dbg;	// Objeto grafico
-    private Image background; //background image
+    private Image background;   //Background image
+    private LinkedList lista;   //List for pipes
+    private Pipes pipe;     //Objeto Pipes
+
 
     private URL backgroundDay = this.getClass().getResource(IMG_BACKGROUNDDAY);
     private URL backgorundNight = this.getClass().getResource(IMG_BACKGROUNDNIGHT);
@@ -77,6 +81,17 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
     public void init() {
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+        lista = new LinkedList();
+        int contPipes = 0;
+        while(contPipes < TOTAL_PIPES) {
+            //URL rURL = this.getClass().getResource("imagenesMalo/perro1.gif");
+            pipe = new Pipes();
+            
+            lista.push(pipe);
+            contPipes++;
+        }
+
         pausado = true;
         crashed = false;
         crashAnimation = false;

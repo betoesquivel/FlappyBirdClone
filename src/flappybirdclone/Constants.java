@@ -12,25 +12,30 @@ package flappybirdclone;
  */
 public interface Constants {
     //image urls strings
-    public final String IMG_BLUEBIRDMID = "images/blueBirdMid.png";
-    public final String IMG_BLUEBIRDHIGH = "images/blueBirdHigh.png";
-    public final String IMG_BLUEBIRDLOW = "images/blueBirdLow.png";
-    public final String IMG_GREENBIRDMID = "images/blueBirdMid.png";
-    public final String IMG_GREENBIRDHIGH = "images/blueBirdHigh.png";
-    public final String IMG_GREENBIRDLOW = "images/blueBirdLow.png";
+
+    //images Bird
+    public final String IMG_BLUEBIRDMID = "flappybirdclone/images/blueBirdMid.png";
+    public final String IMG_BLUEBIRDHIGH = "flappybirdclone/images/blueBirdHigh.png";
+    public final String IMG_BLUEBIRDLOW = "flappybirdclone/images/blueBirdLow.png";
+    public final String IMG_GREENBIRDMID = "flappybirdclone/images/blueBirdMid.png";
+    public final String IMG_GREENBIRDHIGH = "flappybirdclone/images/blueBirdHigh.png";
+    public final String IMG_GREENBIRDLOW = "flappybirdclone/images/blueBirdLow.png";
+
+    //images Background
+    public final String IMG_BACKGROUNDNIGHT = "flappybirdclone/images/backgroundNight.png";
+    public final String IMG_BACKGROUNDDAY = "flappybirdclone/images/backgroundDay.png";
+    public final String IMG_FLOOR = "flappybirdclone/images/backgroundDay.png";
     
-    public final String IMG_BACKGROUNDNIGHT = "images/backgroundNight.png";
-    public final String IMG_BACKGROUNDDAY = "images/backgroundDay.png";
-    public final String IMG_FLOOR = "images/Floor.png";
-    
-    public final String IMG_LOWERGREENPIPE = "images/lowerGreenPipe.png";
-    public final String IMG_UPPERGREENPIPE = "images/upperGreenPipe.png";
-    public final String IMG_LOWERREDPIPE = "images/lowerRedPipe.png";
-    public final String IMG_UPPERREDPIPE = "images/upperRedPipe.png";
-    
-    public final String IMG_READY = "images/ready.png";
-    public final String IMG_PLAYBUTTON = "images/playButton.png";
-    public final String IMG_PAUSEBUTTON = "images/pauseButton.png";
+    //images Pipes
+    public final String IMG_LOWERGREENPIPE = "flappybirdclone/images/lowerGreenPipe.png";
+    public final String IMG_UPPERGREENPIPE = "flappybirdclone/images/upperGreenPipe.png";
+    public final String IMG_LOWERREDPIPE = "flappybirdclone/images/lowerRedPipe.png";
+    public final String IMG_UPPERREDPIPE = "flappybirdclone/images/upperRedPipe.png";
+
+    //images buttons and ready sign
+    public final String IMG_READY = "flappybirdclone/images/ready.png";
+    public final String IMG_PLAYBUTTON = "flappybirdclone/images/playButton.png";
+    public final String IMG_PAUSEBUTTON = "flappybirdclone/images/pauseButton.png";
     
     //sound urls strings
     public final String SND_FLAP = "sounds/flap.wav";
@@ -57,4 +62,15 @@ public interface Constants {
     public final double G = 2; //gravity
     public final int GAME_SPEED = 1; //Change in x of the whole game (background and pipes)
     public final int LEVEL1GAP = PIPE_WIDTH * 5; 
+    public final int TOTAL_PIPES = 10;
+    
+    //Gaps en eje Y between pipes 
+    public final int GAP_Y_LVL_1 = 660;
+    public final int GAP_Y_LVL_2 = 624;
+    public final int GAP_Y_LVL_3 = 588;
+    
+    //Gaps en eje X between pipes 
+    public final int GAP_X_LVL_1 = 280;
+    public final int GAP_X_LVL_2 = 230;
+    public final int GAP_X_LVL_3 = 180;
 }
