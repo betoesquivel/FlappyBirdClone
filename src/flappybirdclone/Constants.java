@@ -24,7 +24,7 @@ public interface Constants {
     //images Background
     public final String IMG_BACKGROUNDNIGHT = "images/backgroundNight.png";
     public final String IMG_BACKGROUNDDAY = "images/backgroundDay.png";
-    public final String IMG_FLOOR = "images/backgroundDay.png";
+    public final String IMG_FLOOR = "images/Floor.png";
     
     //images Pipes
     public final String IMG_LOWERGREENPIPE = "images/lowerGreenPipe.png";

@@ -39,7 +39,6 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
     //floor
     private ImageIcon floor; //floor image
-    private ImageIcon floor2; //floor image
     private URL floorURL = this.getClass().getResource(IMG_FLOOR);
     private int floorPos; //contains the x position of the floor
 
