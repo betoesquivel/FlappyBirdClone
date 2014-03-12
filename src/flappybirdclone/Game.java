@@ -291,6 +291,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             pausado = true;
             flappy.resetPosition();
             resetPipes();
+            score = 0; 
         }
     }
 
