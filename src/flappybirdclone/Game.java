@@ -9,7 +9,6 @@ package flappybirdclone;
  *
  * @author ppesq
  */
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -17,8 +16,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
+import java.net.URL;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import java.util.LinkedList;
 
 /**
  * El applet AppletAnimacion muestra una animación en pantalla.
@@ -31,14 +32,49 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     private LinkedList lista;   //List for pipes
     private Pipes pipe;     //Objeto Pipes
 
-    
-    public Game(){
-        init(); 
+
+    private URL backgroundDay = this.getClass().getResource(IMG_BACKGROUNDDAY);
+    private URL backgorundNight = this.getClass().getResource(IMG_BACKGROUNDNIGHT);
+
+    //floor
+    private ImageIcon floor; //floor image
+    private ImageIcon floor2; //floor image
+    private URL floorURL = this.getClass().getResource(IMG_FLOOR);
+    private int floorPos; //contains the x position of the floor
+
+    //pause
+    private ImageIcon pause; //pause image
+    private ImageIcon play; //play image
+    private URL pauseURL = this.getClass().getResource(IMG_PLAYBUTTON);
+    private URL playURL = this.getClass().getResource(IMG_PAUSEBUTTON);
+    private int playCounter; //counter of cycles the play image stays on after pressing space
+
+    //Variables de control de tiempo de la animación
+    private long tiempoActual;
+    private long tiempoInicial;
+    private double timer;
+
+    boolean pausado;
+
+    //characters
+    private Bird flappy;
+
+    //Bird URLs
+    private URL greenBird1 = this.getClass().getResource(IMG_GREENBIRDMID);
+    private URL greenBird2 = this.getClass().getResource(IMG_GREENBIRDHIGH);
+    private URL greenBird3 = this.getClass().getResource(IMG_GREENBIRDLOW);
+    private URL blueBird1 = this.getClass().getResource(IMG_BLUEBIRDMID);
+    private URL blueBird2 = this.getClass().getResource(IMG_BLUEBIRDHIGH);
+    private URL blueBird3 = this.getClass().getResource(IMG_BLUEBIRDLOW);
+
+    public Game() {
+        init();
+        start();
     }
-    
-    public void init(){
+
+    public void init() {
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        
+
         lista = new LinkedList();
         int contPipes = 0;
         while(contPipes < TOTAL_PIPES) {
@@ -48,7 +84,19 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             lista.push(pipe);
             contPipes++;
         }
-        
+
+        pausado = true;
+        floorPos = 0;
+        playCounter = 0;
+        //create bird onscreen default pos
+        flappy = createBird(BIRD_DEFAULTX, BIRD_DEFAULTY);
+
+        background = Toolkit.getDefaultToolkit().getImage(backgroundDay);
+        floor = new ImageIcon(Toolkit.getDefaultToolkit().getImage(floorURL));
+        pause = new ImageIcon(Toolkit.getDefaultToolkit().getImage(pauseURL));
+        play = new ImageIcon(Toolkit.getDefaultToolkit().getImage(playURL));
+
+        addKeyListener(this);
         //Posiciona al gordo en la mitad derecha del applet en la parte de hasta abajo.
 //        gordo.setPosX(3 * getWidth() / 4 - gordo.getAncho() / 2);
 //        gordo.setPosY(getHeight() - gordo.getAlto() - gordo.getAlto() / 2 + 4);
@@ -71,134 +119,206 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 //        addKeyListener(this);
 //        addMouseListener(this);
     }
-    
-    public Bird createBird(int posX, int posY){
+
+    public Bird createBird(int posX, int posY) {
         Animacion flapping = new Animacion();
-        
+        flapping.sumaCuadro(Toolkit.getDefaultToolkit().getImage(greenBird1), 100);
+        flapping.sumaCuadro(Toolkit.getDefaultToolkit().getImage(greenBird2), 100);
+        flapping.sumaCuadro(Toolkit.getDefaultToolkit().getImage(greenBird1), 100);
+        flapping.sumaCuadro(Toolkit.getDefaultToolkit().getImage(greenBird3), 100);
+
         Bird newBird = new Bird(posX, posY, flapping);
-        
-        return newBird; 
+
+        return newBird;
     }
-    
+
     public void start() {
-        
+        //Crea el thread
+        Thread hilo = new Thread(this);
+        //Inicializa el thread
+        hilo.start();
     }
-    
+
     public void stop() {
-        
+
     }
-    
+
     public void destroy() {
-        
+
     }
 
     public void run() {
-        //Guarda el tiempo actual del sistema
-            //tiempoActual = System.currentTimeMillis();
-            while (true) {
-                //update();
-                //checkCollision();
-                repaint();    // Se actualiza el <code>Applet</code> repintando el contenido.
-                try	{
-                        // El thread se duerme.
-                        Thread.sleep (20);
-                }
-                catch (InterruptedException ex)	{
-                        System.out.println("Error en " + ex.toString());
-                }
+        tiempoActual = System.currentTimeMillis();
+
+        //Ciclo principal del Applet. Actualiza y despliega en pantalla la animación hasta que el Applet sea cerrado
+        while (true) {
+            if (!pausado) {
+                //Updates characters
+                update();
+
+                //Manda a llamar checa colision
+                checkCollision();
+            } else {
+                updateJustAnimation();
             }
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            //Manda a llamar al método paint() para mostrar en pantalla la animación
+            repaint();
+
+            //Hace una pausa de 100 milisegundos
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+            }
+        }
     }
 
+    //updates position of all elements
     public void update() {
-        
+        //Determina el tiempo que ha transcurrido desde que el Applet inicio su ejecución
+        long tiempoTranscurrido
+                = System.currentTimeMillis() - tiempoActual;
+
+        //Guarda el tiempo actual
+        tiempoActual += tiempoTranscurrido;
+
+        timer += 1;
+        flappy.move(timer);
+        flappy.updateAnimation(tiempoTranscurrido);
+
+        if (floorPos <= floor.getIconWidth() * -1) {
+            floorPos = 0;
+        } else {
+            floorPos -= GAME_SPEED;
+        }
+
+        try {
+            Thread.sleep(0);
+        } catch (InterruptedException ex) {
+        }
     }
-    
+
+    //update animation on pause
+    public void updateJustAnimation() {
+        //Determina el tiempo que ha transcurrido desde que el Applet inicio su ejecución
+        long tiempoTranscurrido
+                = System.currentTimeMillis() - tiempoActual;
+
+        //Guarda el tiempo actual
+        tiempoActual += tiempoTranscurrido;
+        flappy.updateAnimation(tiempoTranscurrido);
+
+        if (floorPos <= floor.getIconWidth() * -1) {
+            floorPos = 0;
+        } else {
+            floorPos -= GAME_SPEED;
+        }
+        try {
+            Thread.sleep(0);
+        } catch (InterruptedException ex) {
+        }
+    }
+
     public void checkCollision() {
-        
+
     }
     /**
-    * Metodo <I>paint</I> sobrescrito de la clase <code>Applet</code>,
-    * heredado de la clase Container.<P>
-    * En este metodo lo que hace es actualizar el contenedor
-    * @param g es el <code>objeto grafico</code> usado para dibujar.
-    */
-   public void paint(Graphics g) {
-           // Inicializan el DoubleBuffer
-           if (dbImage == null){
-                   dbImage = createImage (this.getSize().width, this.getSize().height);
-                   dbg = dbImage.getGraphics ();
-           }
+     * Metodo <I>update</I> sobrescrito de la clase <code>Applet</code>,
+     * heredado de la clase Container.<P>
+     * En este metodo lo que hace es actualizar el contenedor
+     *
+     * @param g es el <code>objeto grafico</code> usado para dibujar.
+     */
+    public void paint(Graphics g) {
+        // Inicializan el DoubleBuffer
+        if (dbImage == null) {
+            dbImage = createImage(this.getSize().width, this.getSize().height);
+            dbg = dbImage.getGraphics();
+        }
 
-           // Actualiza la imagen de fondo.
-           dbg.setColor(getBackground ());
-           dbg.fillRect(0, 0, this.getSize().width, this.getSize().height);
+        // Actualiza la imagen de fondo.
+        dbg.setColor(getBackground());
+        dbg.fillRect(0, 0, this.getSize().width, this.getSize().height);
+        dbg.drawImage(background, 0, 0, this);
 
-           // Actualiza el Foreground.
-           dbg.setColor(getForeground());
-           paint1(dbg);
+        // Actualiza el Foreground.
+        dbg.setColor(getForeground());
+        paintFront(dbg);
 
-           // Dibuja la imagen actualizada
-           g.drawImage (dbImage, 0, 0, this);
-   }
-   
-   public void paint1(Graphics g) {
-        if ( lista != null) { //niño != null &&
-                    
-            //Dibuja la imagen en la posicion actualizada
-            //g.drawImage(niño.getImagenI(), niño.getPosX(),niño.getPosY(), this);
-            for(int i = 0; i < lista.size(); i++) {
-                pipe = (Pipes)(lista.get(0));
-                g.drawImage(pipe.getPipeUp(), pipe.getPosX(),pipe.getPosY(), this);
-                g.drawImage(pipe.getPipeDown(), pipe.getPosX(),pipe.getPosY() + GAP_Y_LVL_1, this);
+        // Dibuja la imagen actualizada
+        g.drawImage(dbImage, 0, 0, this);
+
+        paintFront(g);
+    }
+
+    /**
+     * El método paint() muestra en pantalla la animación
+     */
+    public void paintFront(Graphics g) {
+        // Muestra en pantalla el cuadro actual de la animación
+        if (flappy != null) {
+
+            if (pausado) {
+                g.drawImage(pause.getImage(), WINDOW_WIDTH / 2 - pause.getIconWidth() / 2, WINDOW_HEIGHT / 2 - pause.getIconHeight() / 2, this);
             }
+            if (playCounter > 0) {
+                playCounter--;
+                g.drawImage(play.getImage(), WINDOW_WIDTH / 2 - pause.getIconWidth() / 2, WINDOW_HEIGHT / 2 - pause.getIconHeight() / 2, this);
+            }
+            //draw bird
+            g.drawImage(flappy.getImage(), flappy.getPosX(), flappy.getPosY(), this);
 
-            g.drawString("Score: " , 10, 10);
+            //draw floor
+            g.drawImage(floor.getImage(), floorPos, WINDOW_HEIGHT - floor.getIconHeight(), this);
+            g.drawImage(floor.getImage(), floor.getIconWidth() + floorPos, WINDOW_HEIGHT - floor.getIconHeight(), this);
 
         } else {
-                //Da un mensaje mientras se carga el dibujo	
-                g.drawString("No se cargo la imagen..", 20, 20);
+            g.drawString("Cargando...", getWidth() / 2, getHeight() / 2);
         }
-    } 
+
+    }
     //KEYBOARD CONTROLS
     @Override
     public void keyTyped(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //presiono flecha izquierda
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            flappy.flap();
+            timer = 0;
+            if (pausado) {
+                playCounter = 5;
+            }
+            pausado = false;
+        } else if (e.getKeyCode() == KeyEvent.VK_P) {
+            pausado = !pausado;
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
