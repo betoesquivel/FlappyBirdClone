@@ -13,7 +13,14 @@ import java.net.URL;
  * @author ppesq
  */
 public class Bird extends Base {
+    //movement
+    private int ySpeed = 0; 
 
-
-
+    //animations
+    Animacion basic; 
+    
+    public Bird(int posX, int posY, Animacion a1) {
+        
+    }
+    
 }//Fin de la clase Bird

@@ -46,5 +46,38 @@ public class Base {
         this.posY = y;
     }
 
+    /**
+     * Access method for the position in X
+     * @return posX of type <code>int</code>
+     */
+    public int getPosX() {
+        return posX;
+    }
+
+    /**
+     * Modifier method setPosX for the position in X
+     * @param posX of type <code>int</code>
+     */
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+    
+    /**
+     * Access method for the position in X
+     * @return posX of type <code>int</code>
+     */
+    public int getPosY() {
+        return posY;
+    }
+    
+    /**
+     * Modifier method setPosX for the position in X
+     * @param posX of type <code>int</code>
+     */
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
+    
+    
 
 }// Fin de la clase Base
