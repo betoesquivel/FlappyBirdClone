@@ -82,20 +82,8 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
     public void init() {
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-        lista = new LinkedList();
-        int contPipes = 0;
-        int gapX = 0;
-        score = 0;
-
-        while (contPipes < TOTAL_PIPES) {
-            //URL rURL = this.getClass().getResource("imagenesMalo/perro1.gif");
-            pipe = new Pipes(gapX, 0);
-            pipe.setGap(GAP_Y_LVL_1);
-            lista.push(pipe);
-            contPipes++;
-            gapX += GAP_X_LVL_2;
-        }
+        
+        resetPipes();
 
         pausado = true;
         crashed = false;
@@ -151,6 +139,21 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         Bird newBird = new Bird(posX, posY, flapping);
 
         return newBird;
+    }
+    
+    public void resetPipes() {
+        
+        lista = new LinkedList();
+        int contPipes = 0;
+        int gapX = 0;
+        while(contPipes < TOTAL_PIPES) {
+            //URL rURL = this.getClass().getResource("imagenesMalo/perro1.gif");
+            pipe = new Pipes(gapX, 0);
+            
+            lista.push(pipe);
+            contPipes++;
+            gapX += GAP_X_LVL_2;
+        }
     }
 
     public void start() {
@@ -287,6 +290,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             crashAnimation = false;
             pausado = true;
             flappy.resetPosition();
+            resetPipes();
         }
     }
 
