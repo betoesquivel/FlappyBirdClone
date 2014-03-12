@@ -44,12 +44,12 @@ public class Pipes extends Base implements Constants {
         return (new ImageIcon(pipeDown.getImage())).getImage();
     }
     
-    public Rectangle getPerimetro(){
-            return new Rectangle(getPosX(),getPosY(),getAncho(),getAlto());
+    public Rectangle getPerimetro(int x, int y){
+            return new Rectangle(x, y,PIPE_HEIGHT, PIPE_WIDTH);
     }
     
-    public boolean intersecta(Base obj){
-            return getPerimetro().intersects(obj.getPerimetro());
+    public boolean intersecta(int x, int y, Base obj){
+            return getPerimetro(x, y).intersects(obj.getPerimetro());
     }
     
     public boolean checkPipeUpCollision(Base obj) {
