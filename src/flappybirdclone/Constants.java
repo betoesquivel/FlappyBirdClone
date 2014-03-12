@@ -65,9 +65,9 @@ public interface Constants {
     public final int TOTAL_PIPES = 10;
     
     //Gaps en eje Y between pipes 
-    public final int GAP_Y_LVL_1 = 660;
-    public final int GAP_Y_LVL_2 = 624;
-    public final int GAP_Y_LVL_3 = 588;
+    public final int GAP_Y_LVL_1 = 527;
+    public final int GAP_Y_LVL_2 = 491;
+    public final int GAP_Y_LVL_3 = 455;
     
     //Gaps en eje X between pipes 
     public final int GAP_X_LVL_1 = 280;

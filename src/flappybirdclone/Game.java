@@ -82,12 +82,14 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
         lista = new LinkedList();
         int contPipes = 0;
+        int gapX = 0;
         while(contPipes < TOTAL_PIPES) {
             //URL rURL = this.getClass().getResource("imagenesMalo/perro1.gif");
-            pipe = new Pipes();
+            pipe = new Pipes(gapX, 0);
             
             lista.push(pipe);
             contPipes++;
+            gapX += GAP_X_LVL_2;
         }
 
         pausado = true;
@@ -193,6 +195,12 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
         //Guarda el tiempo actual
         tiempoActual += tiempoTranscurrido;
+        
+        for(int i = 0; i < lista.size(); i++) {
+            pipe = (Pipes) (lista.get(i));
+            
+            pipe.move();
+        }
 
         timer += 1;
         flappy.move(timer);
@@ -284,6 +292,13 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             }
             //draw bird
             g.drawImage(flappy.getImage(), flappy.getPosX(), flappy.getPosY(), this);
+            
+            for(int i = 0; i < lista.size(); i++) {
+                pipe = (Pipes) (lista.get(i));
+
+                g.drawImage(pipe.getPipeUp(), pipe.getPosX(),pipe.getPosY(), this);
+                g.drawImage(pipe.getPipeDown(), pipe.getPosX(),pipe.getPosY() + GAP_Y_LVL_1, this);
+            }
 
             //draw floor
             g.drawImage(floor.getImage(), floorPos, WINDOW_HEIGHT - floor.getIconHeight(), this);
