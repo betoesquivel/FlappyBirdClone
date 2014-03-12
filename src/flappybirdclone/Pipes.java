@@ -27,21 +27,26 @@ public class Pipes extends Base implements Constants {
     //private int yPipeDown;
     
     
-    public Pipes() {
-        super();
+    public Pipes(int xParam, int yParam) {
+        super(xParam, yParam);
         int x = WINDOW_WIDTH;
-        int y = (int)(Math.random()*343);
+        int y = (-1)*((int)(Math.random()*210));
+        this.setPosX(this.getPosX() + x);
         this.setPosY(y);
         pipeUp = new ImageIcon(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource(IMG_UPPERGREENPIPE)));
         pipeDown = new ImageIcon(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource(IMG_LOWERGREENPIPE)));
     }
     
     public Image getPipeUp() {
-        return (new ImageIcon(pipeUp.getImage())).getImage();
+        return pipeUp.getImage();
     }
     
     public Image getPipeDown() {
-        return (new ImageIcon(pipeDown.getImage())).getImage();
+        return pipeDown.getImage();
+    }
+    
+    public boolean checkPipeCollision() {
+        return (this.getPosX() + this.getAncho() < 0);
     }
     
     public Rectangle getPerimetro(int x, int y){
@@ -66,7 +71,7 @@ public class Pipes extends Base implements Constants {
         //It's only necessary to move the pipe on x
         //The Y position stays always the same
         
-        this.setPosX(this.getPosX() - 1);
+        this.setPosX(this.getPosX() - GAME_SPEED);
     }
 
 
