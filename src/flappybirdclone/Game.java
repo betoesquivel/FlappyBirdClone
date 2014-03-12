@@ -149,7 +149,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         while(contPipes < TOTAL_PIPES) {
             //URL rURL = this.getClass().getResource("imagenesMalo/perro1.gif");
             pipe = new Pipes(gapX, 0);
-            
+            pipe.setGap(GAP_Y_LVL_1); 
             lista.push(pipe);
             contPipes++;
             gapX += GAP_X_LVL_2;
