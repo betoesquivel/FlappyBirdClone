@@ -30,7 +30,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     private Image dbImage;    // Imagen a proyectar
     private Graphics dbg;	// Objeto grafico
     private Image background;   //Background image
-    private LinkedList lista;   //List for pipes
+    private LinkedList<Pipes> lista;   //List for pipes
     private Pipes pipe;     //Objeto Pipes
 
     private URL backgroundDay = this.getClass().getResource(IMG_BACKGROUNDDAY);
@@ -83,10 +83,10 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         lista = new LinkedList();
         int contPipes = 0;
         int gapX = 0;
-        while(contPipes < TOTAL_PIPES) {
+        while (contPipes < TOTAL_PIPES) {
             //URL rURL = this.getClass().getResource("imagenesMalo/perro1.gif");
             pipe = new Pipes(gapX, 0);
-            
+
             lista.push(pipe);
             contPipes++;
             gapX += GAP_X_LVL_2;
@@ -196,10 +196,10 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
         //Guarda el tiempo actual
         tiempoActual += tiempoTranscurrido;
-        
-        for(int i = 0; i < lista.size(); i++) {
+
+        for (int i = 0; i < lista.size(); i++) {
             pipe = (Pipes) (lista.get(i));
-            
+
             pipe.move();
         }
 
@@ -245,13 +245,24 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     public void checkCollision() {
         if (flappy.getPosY() >= WINDOW_HEIGHT - floor.getIconHeight() && !crashAnimation) {
             crashed = true;
-            crashAnimation = true; 
+            crashAnimation = true;
             failClip.play();
         }
-        
+
+        if (!crashAnimation) {
+            for (Pipes pipe : lista) {
+                if (pipe.checkPipeUpCollision(flappy) || pipe.checkPipeDownCollision(flappy)) {
+                    crashed = true;
+                    crashAnimation = true;
+                    failClip.play();
+                }
+            }
+
+        }
+
         if (crashAnimation && flappy.getPosY() >= WINDOW_HEIGHT) {
             crashAnimation = false;
-            pausado = true; 
+            pausado = true;
             flappy.resetPosition();
         }
     }
@@ -301,12 +312,12 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             }
             //draw bird
             g.drawImage(flappy.getImage(), flappy.getPosX(), flappy.getPosY(), this);
-            
-            for(int i = 0; i < lista.size(); i++) {
+
+            for (int i = 0; i < lista.size(); i++) {
                 pipe = (Pipes) (lista.get(i));
 
-                g.drawImage(pipe.getPipeUp(), pipe.getPosX(),pipe.getPosY(), this);
-                g.drawImage(pipe.getPipeDown(), pipe.getPosX(),pipe.getPosY() + GAP_Y_LVL_1, this);
+                g.drawImage(pipe.getPipeUp(), pipe.getPosX(), pipe.getPosY(), this);
+                g.drawImage(pipe.getPipeDown(), pipe.getPosX(), pipe.getPosY() + GAP_Y_LVL_1, this);
             }
 
             //draw floor
