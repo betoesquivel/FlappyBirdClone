@@ -29,7 +29,7 @@ public class Pipes extends Base implements Constants {
     public Pipes(int xParam, int yParam) {
         super(xParam, yParam);
         int x = WINDOW_WIDTH;
-        int y = (-1) * ((int) (Math.random() * 210));
+        int y = (-1)*((int)(Math.random()*218) + 125);
         this.setPosX(this.getPosX() + x);
         this.setPosY(y);
         pipeUp = new ImageIcon(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource(IMG_UPPERGREENPIPE)));
