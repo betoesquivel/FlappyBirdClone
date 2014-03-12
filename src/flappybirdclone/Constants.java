@@ -32,6 +32,10 @@ public interface Constants {
     public final String IMG_PLAYBUTTON = "images/playButton.png";
     public final String IMG_PAUSEBUTTON = "images/pauseButton.png";
     
+    //sound urls strings
+    public final String SND_FLAP = "sounds/flap.wav";
+    public final String SND_FAIL = "sounds/fail.wav";
+    public final String SND_POINT = "sounds/mariobroscoin.wav";
     //window
     public final int WINDOW_HEIGHT = 767;
     public final int WINDOW_WIDTH = 432;

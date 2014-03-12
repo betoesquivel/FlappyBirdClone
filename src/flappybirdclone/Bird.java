@@ -25,7 +25,11 @@ public class Bird extends Base implements Constants {
         basic = a1; 
     }
     
-    
+    public void resetPosition() {
+        setPosX(BIRD_DEFAULTX);
+        setPosY(BIRD_DEFAULTY);
+        setySpeed(0);
+    }
     public void flap(){
         setySpeed(-30);
     }
