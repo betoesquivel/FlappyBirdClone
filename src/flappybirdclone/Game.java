@@ -21,6 +21,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
 
 /**
  * El applet AppletAnimacion muestra una animación en pantalla.
@@ -74,7 +75,13 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     SoundClip flapClip;
     SoundClip failClip;
     SoundClip pointClip;
+    
+    //player name
+    private String playerName; 
 
+    /**
+     * Constructor from the Game class that calls init and start methods. 
+     */
     public Game() {
         init();
         start();
@@ -106,27 +113,20 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         play = new ImageIcon(Toolkit.getDefaultToolkit().getImage(playURL));
 
         addKeyListener(this);
-        //Posiciona al gordo en la mitad derecha del applet en la parte de hasta abajo.
-//        gordo.setPosX(3 * getWidth() / 4 - gordo.getAncho() / 2);
-//        gordo.setPosY(getHeight() - gordo.getAlto() - gordo.getAlto() / 2 + 4);
+        //Get the player's name
+        playerName = JOptionPane.showInputDialog(null, "Please enter your name:", "Brick Breaker, Version 1.2", JOptionPane.QUESTION_MESSAGE);
+        if (playerName == null) {
+            System.exit(0);
+        }
+//        if (playerName.toUpperCase().equals("TY") || playerName.toUpperCase().equals("TYKELLEY") || playerName.toUpperCase().equals("TYLUCAS") || playerName.toUpperCase().equals("TYLUCASKELLEY") || playerName.toUpperCase().equals("TY-LUCAS") || playerName.toUpperCase().equals("TY-LUCAS KELLEY") || playerName.toUpperCase().equals("TY KELLEY")) {
+//            score += 1000;
+//            JOptionPane.showMessageDialog(null, "You unlocked the secret 1,000 point bonus! Nice name choice by the way.", "1,000 Points", JOptionPane.INFORMATION_MESSAGE);
+//        }
 //
-//        burger = crearMalo(1);
-//
-//        //inicializo el marcador en 0
-//        score = 0;
-//
-//        //el juego no esta pausado
-//        pausado = false;
-//
-//        //se cargan los sonidos
-//        sonido = new SoundClip(saURL);
-//        bomb = new SoundClip(baURL);
-//
-//        background = Toolkit.getDefaultToolkit().getImage(backgroundURL);
-//        //Pinta el fondo del Applet con una imagen		
-//        setBackground(Color.white);
-//        addKeyListener(this);
-//        addMouseListener(this);
+//        //Start Screen that displays information and asks if the user wants music or not, stores that choice
+//        String[] options = {"Yes", "No"};
+//        withSound = JOptionPane.showOptionDialog(null, "Brick Breaker, Version 1.2\nTy-Lucas Kelley\nVisit www.tylucaskelley.com for more projects.\n\nControls\n    Spacebar: Start game, Pause/Resume while in game.\n    Left/Right arrow keys: Move paddle\nItems\n    Green Item: Expand paddle\n    Red Item: Shrink paddle\nScoring\n    Block: 50 points\n    Level-up: 100 points\n    Life Loss: -100 points\n\n\n     Do you want background music?", "About the Game", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+//        playMusic(trackList, withSound, level);
     }
 
     public Bird createBird(int posX, int posY) {
@@ -367,7 +367,9 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             }
 
             //draw score
+//            Font dataFont = g.getFont();
             g.drawString("Score: " + score, 40, 50);
+            g.drawString("Name: " + score, 40, 65);
         } else {
             g.drawString("Cargando...", getWidth() / 2, getHeight() / 2);
         }
