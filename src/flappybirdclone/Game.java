@@ -33,7 +33,6 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     private LinkedList lista;   //List for pipes
     private Pipes pipe;     //Objeto Pipes
 
-
     private URL backgroundDay = this.getClass().getResource(IMG_BACKGROUNDDAY);
     private URL backgorundNight = this.getClass().getResource(IMG_BACKGROUNDNIGHT);
 
@@ -55,7 +54,8 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     private double timer;
 
     boolean pausado;
-    boolean crashed; 
+    boolean crashed;
+    boolean crashAnimation;
     //characters
     private Bird flappy;
 
@@ -71,7 +71,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     SoundClip flapClip;
     SoundClip failClip;
     SoundClip pointClip;
-    
+
     public Game() {
         init();
         start();
@@ -93,15 +93,16 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         }
 
         pausado = true;
-        crashed = false; 
+        crashed = false;
+        crashAnimation = false;
         floorPos = 0;
         playCounter = 0;
-        
+
         //sound effects
         flapClip = new SoundClip(SND_FLAP);
         failClip = new SoundClip(SND_FAIL);
         pointClip = new SoundClip(SND_POINT);
-        
+
         //create bird onscreen default pos
         flappy = createBird(BIRD_DEFAULTX, BIRD_DEFAULTY);
 
@@ -206,10 +207,12 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         flappy.move(timer);
         flappy.updateAnimation(tiempoTranscurrido);
 
-        if (floorPos <= floor.getIconWidth() * -1) {
-            floorPos = 0;
-        } else {
-            floorPos -= GAME_SPEED;
+        if (!crashAnimation) {
+            if (floorPos <= floor.getIconWidth() * -1) {
+                floorPos = 0;
+            } else {
+                floorPos -= GAME_SPEED;
+            }
         }
 
         try {
@@ -240,10 +243,16 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     }
 
     public void checkCollision() {
-        if (flappy.getPosY() >= WINDOW_HEIGHT - floor.getIconHeight()) {
-            crashed = true; 
-            flappy.resetPosition();
+        if (flappy.getPosY() >= WINDOW_HEIGHT - floor.getIconHeight() && !crashAnimation) {
+            crashed = true;
+            crashAnimation = true; 
             failClip.play();
+        }
+        
+        if (crashAnimation && flappy.getPosY() >= WINDOW_HEIGHT) {
+            crashAnimation = false;
+            pausado = true; 
+            flappy.resetPosition();
         }
     }
 
@@ -282,7 +291,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     public void paintFront(Graphics g) {
         // Muestra en pantalla el cuadro actual de la animación
         if (flappy != null) {
-            
+
             if (pausado) {
                 g.drawImage(pause.getImage(), WINDOW_WIDTH / 2 - pause.getIconWidth() / 2, WINDOW_HEIGHT / 2 - pause.getIconHeight() / 2, this);
             }
@@ -303,11 +312,10 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             //draw floor
             g.drawImage(floor.getImage(), floorPos, WINDOW_HEIGHT - floor.getIconHeight(), this);
             g.drawImage(floor.getImage(), floor.getIconWidth() + floorPos, WINDOW_HEIGHT - floor.getIconHeight(), this);
-            if(crashed){
+            if (crashed) {
                 g.setColor(Color.WHITE);
                 g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-                crashed = false; 
-                pausado = true; 
+                crashed = false;
             }
         } else {
             g.drawString("Cargando...", getWidth() / 2, getHeight() / 2);
