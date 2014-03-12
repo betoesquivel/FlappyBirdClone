@@ -12,25 +12,25 @@ package flappybirdclone;
  */
 public interface Constants {
     //image urls strings
-    public final String IMG_BLUEBIRDMID = "flappybirdclone/images/blueBirdMid.png";
-    public final String IMG_BLUEBIRDHIGH = "flappybirdclone/images/blueBirdHigh.png";
-    public final String IMG_BLUEBIRDLOW = "flappybirdclone/images/blueBirdLow.png";
-    public final String IMG_GREENBIRDMID = "flappybirdclone/images/blueBirdMid.png";
-    public final String IMG_GREENBIRDHIGH = "flappybirdclone/images/blueBirdHigh.png";
-    public final String IMG_GREENBIRDLOW = "flappybirdclone/images/blueBirdLow.png";
+    public final String IMG_BLUEBIRDMID = "images/blueBirdMid.png";
+    public final String IMG_BLUEBIRDHIGH = "images/blueBirdHigh.png";
+    public final String IMG_BLUEBIRDLOW = "images/blueBirdLow.png";
+    public final String IMG_GREENBIRDMID = "images/blueBirdMid.png";
+    public final String IMG_GREENBIRDHIGH = "images/blueBirdHigh.png";
+    public final String IMG_GREENBIRDLOW = "images/blueBirdLow.png";
     
-    public final String IMG_BACKGROUNDNIGHT = "flappybirdclone/images/backgroundNight.png";
-    public final String IMG_BACKGROUNDDAY = "flappybirdclone/images/backgroundDay.png";
-    public final String IMG_FLOOR = "flappybirdclone/images/backgroundDay.png";
+    public final String IMG_BACKGROUNDNIGHT = "images/backgroundNight.png";
+    public final String IMG_BACKGROUNDDAY = "images/backgroundDay.png";
+    public final String IMG_FLOOR = "images/Floor.png";
     
-    public final String IMG_LOWERGREENPIPE = "flappybirdclone/images/lowerGreenPipe.png";
-    public final String IMG_UPPERGREENPIPE = "flappybirdclone/images/upperGreenPipe.png";
-    public final String IMG_LOWERREDPIPE = "flappybirdclone/images/lowerRedPipe.png";
-    public final String IMG_UPPERREDPIPE = "flappybirdclone/images/upperRedPipe.png";
+    public final String IMG_LOWERGREENPIPE = "images/lowerGreenPipe.png";
+    public final String IMG_UPPERGREENPIPE = "images/upperGreenPipe.png";
+    public final String IMG_LOWERREDPIPE = "images/lowerRedPipe.png";
+    public final String IMG_UPPERREDPIPE = "images/upperRedPipe.png";
     
-    public final String IMG_READY = "flappybirdclone/images/ready.png";
-    public final String IMG_PLAYBUTTON = "flappybirdclone/images/playButton.png";
-    public final String IMG_PAUSEBUTTON = "flappybirdclone/images/pauseButton.png";
+    public final String IMG_READY = "images/ready.png";
+    public final String IMG_PLAYBUTTON = "images/playButton.png";
+    public final String IMG_PAUSEBUTTON = "images/pauseButton.png";
     
     //window
     public final int WINDOW_HEIGHT = 767;
@@ -39,6 +39,8 @@ public interface Constants {
     //flappy bird
     public final int BIRD_WIDTH = 51;
     public final int BIRD_HEIGHT = 36;
+    public final int BIRD_DEFAULTX = 100; 
+    public final int BIRD_DEFAULTY = WINDOW_HEIGHT / 2 - BIRD_HEIGHT / 2; 
     
     //pipes
     public final int PIPE_HEIGHT = 480; 
@@ -48,7 +50,7 @@ public interface Constants {
     //background
     
     //game settings
-    public final int G = 2; //gravity
+    public final double G = 2; //gravity
     public final int GAME_SPEED = 1; //Change in x of the whole game (background and pipes)
     public final int LEVEL1GAP = PIPE_WIDTH * 5; 
 }
