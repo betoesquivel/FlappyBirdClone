@@ -23,9 +23,9 @@ public class Base implements Constants {
     //control de movimiento
     private int posX;    //posicion en x.       
     private int posY;	//posicion en y.
-
+    
     //control de animaciones
-
+    private Animacion animacion;
 
     /* CONSTRUCTORES */
     /**
@@ -78,6 +78,30 @@ public class Base implements Constants {
         this.posY = posY;
     }
     
-    
+    /**
+    * Metodo de acceso que regresa el ancho del icono 
+    * @return un objeto de la clase <code>ImageIcon</code> que es el ancho del icono.
+    */
+   public int getAncho() {
+           //return icono.getIconWidth();
+           return (new ImageIcon(animacion.getImagen())).getIconWidth();
+   }
 
+   /**
+    * Metodo de acceso que regresa el alto del icono 
+    * @return un objeto de la clase <code>ImageIcon</code> que es el alto del icono.
+    */
+   public int getAlto() {
+           //return icono.getIconHeight();
+       return (new ImageIcon(animacion.getImagen())).getIconHeight();
+   }
+    
+    public Rectangle getPerimetro(){
+            return new Rectangle(getPosX(),getPosY(),getAncho(),getAlto());
+    }
+    
+    public boolean intersecta(Base obj){
+            return getPerimetro().intersects(obj.getPerimetro());
+    }
+    
 }// Fin de la clase Base

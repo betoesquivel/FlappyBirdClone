@@ -22,5 +22,5 @@ public class Bird extends Base implements Constants {
     public Bird(int posX, int posY, Animacion a1) {
         
     }
-    
+       
 }//Fin de la clase Bird
