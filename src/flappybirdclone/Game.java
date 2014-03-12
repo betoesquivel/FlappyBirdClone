@@ -56,6 +56,9 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     boolean pausado;
     boolean crashed;
     boolean crashAnimation;
+    boolean scored; //to control the reproduction of soundClip when earning points
+    private int score;
+
     //characters
     private Bird flappy;
 
@@ -83,10 +86,12 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         lista = new LinkedList();
         int contPipes = 0;
         int gapX = 0;
+        score = 0;
+
         while (contPipes < TOTAL_PIPES) {
             //URL rURL = this.getClass().getResource("imagenesMalo/perro1.gif");
             pipe = new Pipes(gapX, 0);
-
+            pipe.setGap(GAP_Y_LVL_1);
             lista.push(pipe);
             contPipes++;
             gapX += GAP_X_LVL_2;
@@ -95,6 +100,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         pausado = true;
         crashed = false;
         crashAnimation = false;
+        scored = false;
         floorPos = 0;
         playCounter = 0;
 
@@ -215,6 +221,14 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             }
         }
 
+//        for (Pipes pipe : lista) {
+//            if (score > 5) {
+//                pipe.setGap(GAP_Y_LVL_2);
+//            } else if (score > 10) {
+//                pipe.setGap(GAP_Y_LVL_3);
+//            }
+//        }
+
         try {
             Thread.sleep(0);
         } catch (InterruptedException ex) {
@@ -251,11 +265,20 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
         if (!crashAnimation) {
             for (Pipes pipe : lista) {
-                if (pipe.checkPipeUpCollision(flappy) || pipe.checkPipeDownCollision(flappy)) {
+                if (pipe.checkPipeCollision(flappy)) {
                     crashed = true;
                     crashAnimation = true;
                     failClip.play();
                 }
+
+                //para el score
+                //entro al pipe
+                if (pipe.getPosX() + PIPE_WIDTH < flappy.getPosX() && !pipe.isPassed()) {
+                    score += 1;
+                    pipe.setPassed(true);
+                    pointClip.play();
+                }
+
             }
 
         }
@@ -317,7 +340,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
                 pipe = (Pipes) (lista.get(i));
 
                 g.drawImage(pipe.getPipeUp(), pipe.getPosX(), pipe.getPosY(), this);
-                g.drawImage(pipe.getPipeDown(), pipe.getPosX(), pipe.getPosY() + GAP_Y_LVL_1, this);
+                g.drawImage(pipe.getPipeDown(), pipe.getPosX(), pipe.getPosY() + pipe.getGap(), this);
             }
 
             //draw floor
@@ -328,6 +351,9 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
                 g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
                 crashed = false;
             }
+
+            //draw score
+            g.drawString("Score: " + score, 40, 50);
         } else {
             g.drawString("Cargando...", getWidth() / 2, getHeight() / 2);
         }
@@ -342,18 +368,20 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
     @Override
     public void keyPressed(KeyEvent e) {
-        //presiono flecha izquierda
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            flappy.flap();
-            flapClip.play();
-            timer = 0;
-            if (pausado) {
-                playCounter = 5;
+        if (!crashAnimation) {
+            if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                flappy.flap();
+                flapClip.play();
+                timer = 0;
+                if (pausado) {
+                    playCounter = 5;
+                }
+                pausado = false;
+            } else if (e.getKeyCode() == KeyEvent.VK_P) {
+                pausado = !pausado;
             }
-            pausado = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_P) {
-            pausado = !pausado;
         }
+
     }
 
     @Override
