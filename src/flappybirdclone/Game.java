@@ -141,6 +141,13 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         return newBird;
     }
     
+    public void pipeReset(int numPipe) {
+        pipe = (Pipes)(lista.get(numPipe));
+        pipe.setPosX(pipe.getPosX() + RETURN_RIGHT);
+        int y = (-1)*((int)(Math.random()*218) + 125);
+        pipe.setPosY(y);
+    }
+    
     public void resetPipes() {
         
         lista = new LinkedList();
@@ -152,7 +159,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             pipe.setGap(GAP_Y_LVL_1); 
             lista.push(pipe);
             contPipes++;
-            gapX += GAP_X_LVL_2;
+            gapX += GAP_X_LVL_1;
         }
     }
 
@@ -284,6 +291,10 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
             }
 
+        }
+        
+        for(int i = 0; i < lista.size(); i++) {
+            
         }
 
         if (crashAnimation && flappy.getPosY() >= WINDOW_HEIGHT) {

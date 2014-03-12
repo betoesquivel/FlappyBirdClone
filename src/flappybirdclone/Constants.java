@@ -55,6 +55,7 @@ public interface Constants {
     public final int PIPE_HEIGHT = 480; 
     public final int PIPE_WIDTH = 78; 
     public final int PIPE_GAP = 220; 
+    public final int RETURN_RIGHT = 2800;
     
     //background
     
