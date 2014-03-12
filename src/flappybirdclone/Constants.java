@@ -60,14 +60,14 @@ public interface Constants {
     
     //game settings
     public final double G = 2; //gravity
-    public final int GAME_SPEED = 1; //Change in x of the whole game (background and pipes)
+    public final int GAME_SPEED = 5; //Change in x of the whole game (background and pipes)
     public final int LEVEL1GAP = PIPE_WIDTH * 5; 
     public final int TOTAL_PIPES = 10;
     
     //Gaps en eje Y between pipes 
-    public final int GAP_Y_LVL_1 = 527;
-    public final int GAP_Y_LVL_2 = 491;
-    public final int GAP_Y_LVL_3 = 455;
+    public final int GAP_Y_LVL_1 = 630;
+    public final int GAP_Y_LVL_2 = 594;
+    public final int GAP_Y_LVL_3 = 558;
     
     //Gaps en eje X between pipes 
     public final int GAP_X_LVL_1 = 280;
