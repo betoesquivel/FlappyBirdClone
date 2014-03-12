@@ -75,12 +75,12 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     SoundClip flapClip;
     SoundClip failClip;
     SoundClip pointClip;
-    
+
     //player name
-    private String playerName; 
+    private String playerName;
 
     /**
-     * Constructor from the Game class that calls init and start methods. 
+     * Constructor from the Game class that calls init and start methods.
      */
     public Game() {
         init();
@@ -140,14 +140,14 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
         return newBird;
     }
-    
+
     public void pipeReset(int numPipe) {
-        pipe = (Pipes)(lista.get(numPipe));
+        pipe = (Pipes) (lista.get(numPipe));
         pipe.setPosX(pipe.getPosX() + RETURN_RIGHT);
-        int y = (-1)*((int)(Math.random()*218) + 125);
+        int y = (-1) * ((int) (Math.random() * 218) + 125);
         pipe.setPosY(y);
     }
-    
+
     public void resetPipes() {
 
         lista = new LinkedList();
@@ -231,13 +231,13 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             }
         }
 
-//        for (Pipes pipe : lista) {
-//            if (score > 5) {
-//                pipe.setGap(GAP_Y_LVL_2);
-//            } else if (score > 10) {
-//                pipe.setGap(GAP_Y_LVL_3);
-//            }
-//        }
+        for (Pipes pipe : lista) {
+            if (score > 5) {
+                pipe.setGap(GAP_Y_LVL_2);
+            } else if (score > 10) {
+                pipe.setGap(GAP_Y_LVL_3);
+            }
+        }
         try {
             Thread.sleep(0);
         } catch (InterruptedException ex) {
@@ -287,15 +287,28 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
                     pipe.setPassed(true);
                     pointClip.play();
                 }
-                
-                //
+
+                //for the resetting of pipes when reaching the end of the applet
+                if (pipe.getPosX() + PIPE_WIDTH < 0) {
+                    Pipes lastPipe = pipe;
+                    int gapX = 0;
+                    //get the last pipe to be drawn
+                    for (Pipes nextPipe : lista) {
+                        if (lastPipe.getPosX() < nextPipe.getPosX()) {
+                            lastPipe = nextPipe;
+                        }
+                            gapX += GAP_X_LVL_1; 
+                    }
+                    //I have the lastPipe drawn
+                    pipe.resetThisPipe(lastPipe, gapX);
+                }
 
             }
 
         }
-        
-        for(int i = 0; i < lista.size(); i++) {
-            
+
+        for (int i = 0; i < lista.size(); i++) {
+
         }
 
         if (crashAnimation && flappy.getPosY() >= WINDOW_HEIGHT) {
@@ -305,7 +318,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             resetPipes();
             score = 0;
         }
-        
+
     }
 
     /**
@@ -367,7 +380,6 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 //                g.drawImage(pipe.getPipeUp(), pipe.getPosX(), pipe.getPosY(), this);
 //                g.drawImage(pipe.getPipeDown(), pipe.getPosX(), pipe.getPosY() + pipe.getGap(), this);
 //            }
-
             //draw floor
             g.drawImage(floor.getImage(), floorPos, WINDOW_HEIGHT - floor.getIconHeight(), this);
             g.drawImage(floor.getImage(), floor.getIconWidth() + floorPos, WINDOW_HEIGHT - floor.getIconHeight(), this);
@@ -380,7 +392,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             //draw score
 //            Font dataFont = g.getFont();
             g.drawString("Score: " + score, 40, 50);
-            g.drawString("Name: " + score, 40, 65);
+            g.drawString("Name: " + playerName, 40, 65);
         } else {
             g.drawString("Cargando...", getWidth() / 2, getHeight() / 2);
         }

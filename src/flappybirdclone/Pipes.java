@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
  */
 public class Pipes extends Base implements Constants {
 
-    //variable imagen
+    //variables
     private ImageIcon pipeUp;
     private ImageIcon pipeDown;
     private int gap;
@@ -90,8 +90,15 @@ public class Pipes extends Base implements Constants {
         this.setPosX(this.getPosX() - GAME_SPEED);
     }
     
-    public void resetThisPipe(){
-        
+    /**
+     * Method resetThisPipe that resets the position 
+     * of the pipes given the last pipe on the game list
+     * @param lastPipe last pipe drawn on the game, where I want to 
+     * append this reseted pipe of type <code>Pipes</code>
+     */
+    public void resetThisPipe(Pipes lastPipe, int newPositionX){
+        this.setPosX(newPositionX - PIPE_WIDTH);
+        setPassed(false); 
     }
 
 }
