@@ -267,7 +267,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     //KEYBOARD CONTROLS
     @Override
     public void keyTyped(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     @Override
