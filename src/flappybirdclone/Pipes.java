@@ -89,5 +89,9 @@ public class Pipes extends Base implements Constants {
 
         this.setPosX(this.getPosX() - GAME_SPEED);
     }
+    
+    public void resetThisPipe(){
+        
+    }
 
 }

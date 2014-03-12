@@ -82,7 +82,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
     public void init() {
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        
+
         resetPipes();
 
         pausado = true;
@@ -149,14 +149,14 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     }
     
     public void resetPipes() {
-        
+
         lista = new LinkedList();
         int contPipes = 0;
         int gapX = 0;
-        while(contPipes < TOTAL_PIPES) {
+        while (contPipes < TOTAL_PIPES) {
             //URL rURL = this.getClass().getResource("imagenesMalo/perro1.gif");
             pipe = new Pipes(gapX, 0);
-            pipe.setGap(GAP_Y_LVL_1); 
+            pipe.setGap(GAP_Y_LVL_1);
             lista.push(pipe);
             contPipes++;
             gapX += GAP_X_LVL_1;
@@ -238,7 +238,6 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 //                pipe.setGap(GAP_Y_LVL_3);
 //            }
 //        }
-
         try {
             Thread.sleep(0);
         } catch (InterruptedException ex) {
@@ -288,6 +287,8 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
                     pipe.setPassed(true);
                     pointClip.play();
                 }
+                
+                //
 
             }
 
@@ -302,7 +303,9 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             pausado = true;
             flappy.resetPosition();
             resetPipes();
+            score = 0;
         }
+        
     }
 
     /**
@@ -323,6 +326,13 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         dbg.setColor(getBackground());
         dbg.fillRect(0, 0, this.getSize().width, this.getSize().height);
         dbg.drawImage(background, 0, 0, this);
+
+        for (int i = 0; i < lista.size(); i++) {
+            pipe = (Pipes) (lista.get(i));
+
+            dbg.drawImage(pipe.getPipeUp(), pipe.getPosX(), pipe.getPosY(), this);
+            dbg.drawImage(pipe.getPipeDown(), pipe.getPosX(), pipe.getPosY() + pipe.getGap(), this);
+        }
 
         // Actualiza el Foreground.
         dbg.setColor(getForeground());
@@ -351,12 +361,12 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             //draw bird
             g.drawImage(flappy.getImage(), flappy.getPosX(), flappy.getPosY(), this);
 
-            for (int i = 0; i < lista.size(); i++) {
-                pipe = (Pipes) (lista.get(i));
-
-                g.drawImage(pipe.getPipeUp(), pipe.getPosX(), pipe.getPosY(), this);
-                g.drawImage(pipe.getPipeDown(), pipe.getPosX(), pipe.getPosY() + pipe.getGap(), this);
-            }
+//            for (int i = 0; i < lista.size(); i++) {
+//                pipe = (Pipes) (lista.get(i));
+//
+//                g.drawImage(pipe.getPipeUp(), pipe.getPosX(), pipe.getPosY(), this);
+//                g.drawImage(pipe.getPipeDown(), pipe.getPosX(), pipe.getPosY() + pipe.getGap(), this);
+//            }
 
             //draw floor
             g.drawImage(floor.getImage(), floorPos, WINDOW_HEIGHT - floor.getIconHeight(), this);
