@@ -32,9 +32,12 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     public Game(){
         init(); 
     }
+    
     public void init(){
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
+        
+        
+        
         //Posiciona al gordo en la mitad derecha del applet en la parte de hasta abajo.
 //        gordo.setPosX(3 * getWidth() / 4 - gordo.getAncho() / 2);
 //        gordo.setPosY(getHeight() - gordo.getAlto() - gordo.getAlto() / 2 + 4);
@@ -56,6 +59,14 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 //        setBackground(Color.white);
 //        addKeyListener(this);
 //        addMouseListener(this);
+    }
+    
+    public Bird createBird(int posX, int posY){
+        Animacion flapping = new Animacion();
+        
+        Bird newBird = new Bird(posX, posY, flapping);
+        
+        return newBird; 
     }
     
     public void start() {
