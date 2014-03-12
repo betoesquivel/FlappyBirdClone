@@ -17,10 +17,20 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import java.util.LinkedList;
+import java.util.Random;
+import java.util.TreeMap;
 import javax.swing.JOptionPane;
 
 /**
@@ -212,11 +222,12 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
         //Guarda el tiempo actual
         tiempoActual += tiempoTranscurrido;
+        if (!crashAnimation) {
+            for (int i = 0; i < lista.size(); i++) {
+                pipe = (Pipes) (lista.get(i));
 
-        for (int i = 0; i < lista.size(); i++) {
-            pipe = (Pipes) (lista.get(i));
-
-            pipe.move();
+                pipe.move();
+            }
         }
 
         timer += 1;
@@ -297,7 +308,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
                         if (lastPipe.getPosX() < nextPipe.getPosX()) {
                             lastPipe = nextPipe;
                         }
-                            gapX += GAP_X_LVL_1; 
+                        gapX += GAP_X_LVL_1;
                     }
                     //I have the lastPipe drawn
                     pipe.resetThisPipe(lastPipe, gapX);
@@ -312,7 +323,6 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         }
 
         if (crashAnimation && flappy.getPosY() >= WINDOW_HEIGHT) {
-            crashAnimation = false;
             pausado = true;
             flappy.resetPosition();
             resetPipes();
@@ -345,6 +355,20 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
             dbg.drawImage(pipe.getPipeUp(), pipe.getPosX(), pipe.getPosY(), this);
             dbg.drawImage(pipe.getPipeDown(), pipe.getPosX(), pipe.getPosY() + pipe.getGap(), this);
+        }
+
+        if (crashAnimation) {
+            dbg.setColor(Color.BLACK);
+            dbg.fillRect(0, 0, getWidth(), getHeight());
+            dbg.setColor(Color.WHITE);
+            dbg.drawString("Name: " + playerName + ", Score: " + score, getWidth() / 5, 20);
+            dbg.drawString("Game Over! Did you make it onto the high score table?", getWidth() / 5, 50);
+            try {
+                printScores(dbg);
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+            dbg.drawString("Press the Spacebar twice to play again.", getWidth() / 5, getHeight() - 20);
         }
 
         // Actualiza el Foreground.
@@ -393,6 +417,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 //            Font dataFont = g.getFont();
             g.drawString("Score: " + score, 40, 50);
             g.drawString("Name: " + playerName, 40, 65);
+
         } else {
             g.drawString("Cargando...", getWidth() / 2, getHeight() / 2);
         }
@@ -419,8 +444,159 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
             } else if (e.getKeyCode() == KeyEvent.VK_P) {
                 pausado = !pausado;
             }
+        }else {
+            if (e.getKeyCode() == KeyEvent.VK_SPACE){
+                crashAnimation = false; 
+            }
         }
 
+    }
+
+    //Makes sure the HighScores.txt file exists
+    public void makeTable() throws IOException {
+        String filename = "HighScores";
+        File f = new File(filename + ".txt");
+        if (f.createNewFile()) {
+            try {
+                writeFakeScores();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        } else {
+            //do nothing
+        }
+    }
+
+    //if there was no previous high score table, this one inputs 10 fake players and scores to fill it
+    public void writeFakeScores() throws IOException {
+        Random rand = new Random();
+
+        int numLines = 10;
+        File f = new File("HighScores.txt");
+        BufferedWriter bw = new BufferedWriter(new FileWriter(f.getAbsoluteFile()));
+        for (int i = 1; i <= numLines; i++) {
+            int score = rand.nextInt(2000);
+            if (numLines - i >= 1) {
+                bw.write("Name: " + "Player" + i + ", " + "Score: " + score + "\n");
+            } else {
+                bw.write("Name: " + "Player" + i + ", " + "Score: " + score);
+            }
+        }
+        bw.close();
+        try {
+            sortTable();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    //Returns the player's name and score formatted correctly
+    public String playerInfo() {
+        return "Name: " + playerName + ", Score: " + score;
+    }
+
+    //returns the number of lines in the high score file
+    public int linesInFile(File f) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(f.getAbsoluteFile()));
+        int lines = 0;
+        while (br.readLine() != null) {
+            lines++;
+        }
+        br.close();
+        return lines;
+    }
+
+    //Add game to high score file by appending it and getting line number from previous method
+    public void saveGame() throws IOException {
+        File f = new File("HighScores.txt");
+        FileWriter fw = new FileWriter(f.getAbsoluteFile(), true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.append("\n" + playerInfo());
+        bw.close();
+    }
+
+    //sorts the high score table high to low using maps and other fun things
+    public void sortTable() throws IOException {
+        File f = new File("HighScores.txt");
+        File temp = new File("temp.txt");
+        TreeMap<Integer, ArrayList<String>> topTen = new TreeMap<Integer, ArrayList<String>>();
+        BufferedReader br = new BufferedReader(new FileReader(f.getAbsoluteFile()));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(temp.getAbsoluteFile()));
+
+        String line = null;
+        while ((line = br.readLine()) != null) {
+            if (line.isEmpty()) {
+                continue;
+            }
+            String[] scores = line.split("Score: ");
+            Integer score = Integer.valueOf(scores[1]);
+            ArrayList<String> players = null;
+
+            //make sure two players with same score are dealt with
+            if ((players = topTen.get(score)) == null) {
+                players = new ArrayList<String>(1);
+                players.add(scores[0]);
+                topTen.put(Integer.valueOf(scores[1]), players);
+            } else {
+                players.add(scores[0]);
+            }
+
+        }
+
+        for (Integer score : topTen.descendingKeySet()) {
+            for (String player : topTen.get(score)) {
+                try {
+                    bw.append(player + "Score: " + score + "\n");
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+        }
+        br.close();
+        bw.close();
+        try {
+            makeNewScoreTable();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    //save the sorted table to the high score file
+    public void makeNewScoreTable() throws IOException {
+        File f = new File("HighScores.txt");
+        File g = new File("temp.txt");
+        f.delete();
+        g.renameTo(f);
+    }
+
+    //Print the top 10 scores, but first excecutes all other file-related methods
+    public void printScores(Graphics g) throws IOException {
+        try {
+            makeTable();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        try {
+            saveGame();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        try {
+            sortTable();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        int h = 100;
+        File fileToRead = new File("HighScores.txt");
+        LineNumberReader lnr = new LineNumberReader(new FileReader(fileToRead));
+        String line = lnr.readLine();
+        while (line != null && lnr.getLineNumber() <= 10) {
+            int rank = lnr.getLineNumber();
+            g.drawString(rank + ". " + line, getWidth() / 5, h);
+            h += 15;
+            line = lnr.readLine();
+        }
+        lnr.close();
     }
 
     @Override
