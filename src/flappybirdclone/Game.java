@@ -28,10 +28,22 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     private Image dbImage;    // Imagen a proyectar
     private Graphics dbg;	// Objeto grafico
     private Image background; //background image
-    private ImageIcon floor; //background image
+
     private URL backgroundDay = this.getClass().getResource(IMG_BACKGROUNDDAY);
     private URL backgorundNight = this.getClass().getResource(IMG_BACKGROUNDNIGHT);
+
+    //floor
+    private ImageIcon floor; //floor image
+    private ImageIcon floor2; //floor image
     private URL floorURL = this.getClass().getResource(IMG_FLOOR);
+    private int floorPos; //contains the x position of the floor
+
+    //pause
+    private ImageIcon pause; //pause image
+    private ImageIcon play; //play image
+    private URL pauseURL = this.getClass().getResource(IMG_PLAYBUTTON);
+    private URL playURL = this.getClass().getResource(IMG_PAUSEBUTTON);
+    private int playCounter; //counter of cycles the play image stays on after pressing space
 
     //Variables de control de tiempo de la animación
     private long tiempoActual;
@@ -58,13 +70,17 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
     public void init() {
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        pausado = false;
+        pausado = true;
+        floorPos = 0;
+        playCounter = 0;
         //create bird onscreen default pos
         flappy = createBird(BIRD_DEFAULTX, BIRD_DEFAULTY);
 
         background = Toolkit.getDefaultToolkit().getImage(backgroundDay);
         floor = new ImageIcon(Toolkit.getDefaultToolkit().getImage(floorURL));
-        
+        pause = new ImageIcon(Toolkit.getDefaultToolkit().getImage(pauseURL));
+        play = new ImageIcon(Toolkit.getDefaultToolkit().getImage(playURL));
+
         addKeyListener(this);
         //Posiciona al gordo en la mitad derecha del applet en la parte de hasta abajo.
 //        gordo.setPosX(3 * getWidth() / 4 - gordo.getAncho() / 2);
@@ -128,6 +144,8 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
                 //Manda a llamar checa colision
                 checkCollision();
+            } else {
+                updateJustAnimation();
             }
             //Manda a llamar al método paint() para mostrar en pantalla la animación
             repaint();
@@ -149,10 +167,37 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         //Guarda el tiempo actual
         tiempoActual += tiempoTranscurrido;
 
-        timer += 1; 
-        flappy.move(timer); 
+        timer += 1;
+        flappy.move(timer);
         flappy.updateAnimation(tiempoTranscurrido);
 
+        if (floorPos <= floor.getIconWidth() * -1) {
+            floorPos = 0;
+        } else {
+            floorPos -= GAME_SPEED;
+        }
+
+        try {
+            Thread.sleep(0);
+        } catch (InterruptedException ex) {
+        }
+    }
+
+    //update animation on pause
+    public void updateJustAnimation() {
+        //Determina el tiempo que ha transcurrido desde que el Applet inicio su ejecución
+        long tiempoTranscurrido
+                = System.currentTimeMillis() - tiempoActual;
+
+        //Guarda el tiempo actual
+        tiempoActual += tiempoTranscurrido;
+        flappy.updateAnimation(tiempoTranscurrido);
+
+        if (floorPos <= floor.getIconWidth() * -1) {
+            floorPos = 0;
+        } else {
+            floorPos -= GAME_SPEED;
+        }
         try {
             Thread.sleep(0);
         } catch (InterruptedException ex) {
@@ -200,13 +245,18 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         if (flappy != null) {
 
             if (pausado) {
-//                g.drawString(gordo.getPAUSADO(), gordo.getPosX() - gordo.getAncho() / 2, gordo.getPosY() + gordo.getAlto() / 2);
+                g.drawImage(pause.getImage(), WINDOW_WIDTH / 2 - pause.getIconWidth() / 2, WINDOW_HEIGHT / 2 - pause.getIconHeight() / 2, this);
+            }
+            if (playCounter > 0) {
+                playCounter--;
+                g.drawImage(play.getImage(), WINDOW_WIDTH / 2 - pause.getIconWidth() / 2, WINDOW_HEIGHT / 2 - pause.getIconHeight() / 2, this);
             }
             //draw bird
             g.drawImage(flappy.getImage(), flappy.getPosX(), flappy.getPosY(), this);
 
             //draw floor
-            g.drawImage(floor.getImage(), 0, WINDOW_HEIGHT - floor.getIconHeight(), this);
+            g.drawImage(floor.getImage(), floorPos, WINDOW_HEIGHT - floor.getIconHeight(), this);
+            g.drawImage(floor.getImage(), floor.getIconWidth() + floorPos, WINDOW_HEIGHT - floor.getIconHeight(), this);
 
         } else {
             g.drawString("Cargando...", getWidth() / 2, getHeight() / 2);
@@ -225,7 +275,11 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         //presiono flecha izquierda
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             flappy.flap();
-            timer = 0; 
+            timer = 0;
+            if (pausado) {
+                playCounter = 5;
+            }
+            pausado = false;
         } else if (e.getKeyCode() == KeyEvent.VK_P) {
             pausado = !pausado;
         }
@@ -233,32 +287,26 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
     @Override
     public void keyReleased(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
