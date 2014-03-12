@@ -12,7 +12,7 @@ import java.net.URL;
  *
  * @author ppesq
  */
-public class Bird extends Base {
+public class Bird extends Base implements Constants {
     //movement
     private int ySpeed = 0; 
 

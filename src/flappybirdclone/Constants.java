@@ -11,6 +11,27 @@ package flappybirdclone;
  * @author ppesq
  */
 public interface Constants {
+    //image urls strings
+    public final String IMG_BLUEBIRDMID = "flappybirdclone/images/blueBirdMid.png";
+    public final String IMG_BLUEBIRDHIGH = "flappybirdclone/images/blueBirdHigh.png";
+    public final String IMG_BLUEBIRDLOW = "flappybirdclone/images/blueBirdLow.png";
+    public final String IMG_GREENBIRDMID = "flappybirdclone/images/blueBirdMid.png";
+    public final String IMG_GREENBIRDHIGH = "flappybirdclone/images/blueBirdHigh.png";
+    public final String IMG_GREENBIRDLOW = "flappybirdclone/images/blueBirdLow.png";
+    
+    public final String IMG_BACKGROUNDNIGHT = "flappybirdclone/images/backgroundNight.png";
+    public final String IMG_BACKGROUNDDAY = "flappybirdclone/images/backgroundDay.png";
+    public final String IMG_FLOOR = "flappybirdclone/images/backgroundDay.png";
+    
+    public final String IMG_LOWERGREENPIPE = "flappybirdclone/images/lowerGreenPipe.png";
+    public final String IMG_UPPERGREENPIPE = "flappybirdclone/images/upperGreenPipe.png";
+    public final String IMG_LOWERREDPIPE = "flappybirdclone/images/lowerRedPipe.png";
+    public final String IMG_UPPERREDPIPE = "flappybirdclone/images/upperRedPipe.png";
+    
+    public final String IMG_READY = "flappybirdclone/images/ready.png";
+    public final String IMG_PLAYBUTTON = "flappybirdclone/images/playButton.png";
+    public final String IMG_PAUSEBUTTON = "flappybirdclone/images/pauseButton.png";
+    
     //window
     public final int WINDOW_HEIGHT = 767;
     public final int WINDOW_WIDTH = 432;

@@ -12,7 +12,7 @@ import java.net.URL;
  *
  * @author ppesq
  */
-public class Pipes extends Base {
+public class Pipes extends Base implements Constants {
 
 
 

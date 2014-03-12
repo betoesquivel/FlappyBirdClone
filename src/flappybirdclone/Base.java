@@ -18,7 +18,7 @@ import java.awt.Rectangle;
  *
  * @author ppesq
  */
-public class Base {
+public class Base implements Constants {
 
     //control de movimiento
     private int posX;    //posicion en x.       
