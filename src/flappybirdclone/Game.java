@@ -148,6 +148,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     }
 
     public void run() {
+        //Guarda el tiempo actual del sistema
         tiempoActual = System.currentTimeMillis();
 
         //Ciclo principal del Applet. Actualiza y despliega en pantalla la animación hasta que el Applet sea cerrado
@@ -221,6 +222,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
     public void checkCollision() {
 
     }
+
     /**
      * Metodo <I>update</I> sobrescrito de la clase <code>Applet</code>,
      * heredado de la clase Container.<P>
@@ -276,6 +278,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
         }
 
     }
+
     //KEYBOARD CONTROLS
     @Override
     public void keyTyped(KeyEvent e) {

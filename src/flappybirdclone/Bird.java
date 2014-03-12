@@ -24,7 +24,6 @@ public class Bird extends Base implements Constants {
         ySpeed = 0; 
         basic = a1; 
     }
-
     
     
     public void flap(){
@@ -53,5 +52,4 @@ public class Bird extends Base implements Constants {
     public Image getImage(){
         return basic.getImagen(); 
     }
-
 }//Fin de la clase Bird
