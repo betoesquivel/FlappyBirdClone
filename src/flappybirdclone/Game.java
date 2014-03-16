@@ -208,7 +208,7 @@ public class Game extends JFrame implements Constants, Runnable, KeyListener, Mo
 
             //Hace una pausa de 100 milisegundos
             try {
-                Thread.sleep(100);
+                Thread.sleep(65);
             } catch (InterruptedException ex) {
             }
         }
